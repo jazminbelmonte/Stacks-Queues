@@ -21,14 +21,14 @@ TEST_CASE("Test balancedBrackets") {
 }
 
 
-TEST_CASE("Test evalutePostfixExpression") {
-    CHECK(evalutePostfixExpression("6 3 + 2 *") == 18);
-    CHECK(evalutePostfixExpression("15 7 1 1 + - / 3 * 2 1 1 + + -") == 5);
-    CHECK(evalutePostfixExpression("1 2 + 4 * 5 + 3 -") == -14);
-    CHECK(static_cast<int>(1000 * evalutePostfixExpression("12 25 5 1 / / * 8 7 + -")) == 14904);
-    CHECK(static_cast<int>(1000 * evalutePostfixExpression("70 14 4 5 15 3 / * - - / 6 +")) == 5757); 
-    CHECK(static_cast<int>(1000 * evalutePostfixExpression("3 5 6 * + 13 - 18 2 / +")) == -19888);
-    CHECK_THROWS(evalutePostfixExpression("7 6 + 3 ; 6 -"));
-    CHECK_THROWS(evalutePostfixExpression("14 + 2 3 *"));
-    CHECK_THROWS(evalutePostfixExpression("14 2 3 +)"));
+TEST_CASE("Test evaluatePostfixExpression()") {
+    CHECK(evaluatePostfixExpression("6 3 + 2 *") == 18);
+    CHECK(evaluatePostfixExpression("15 7 1 1 + - / 3 * 2 1 1 + + -") == 5);
+    CHECK(evaluatePostfixExpression("1 2 + 4 * 5 + 3 -") == -14);
+    CHECK(static_cast<int>(1000 * evaluatePostfixExpression("12 25 5 1 / / * 8 7 + -")) == 14904);
+    CHECK(static_cast<int>(1000 * evaluatePostfixExpression("70 14 4 5 15 3 / * - - / 6 +")) == 5757);
+    CHECK(static_cast<int>(1000 * evaluatePostfixExpression("3 5 6 * + 13 - 18 2 / +")) == -19888);
+    CHECK_THROWS(evaluatePostfixExpression("7 6 + 3 ; 6 -"));
+    CHECK_THROWS(evaluatePostfixExpression("14 + 2 3 *"));
+    CHECK_THROWS(evaluatePostfixExpression("14 2 3 +)"));
 }

@@ -5,103 +5,96 @@
 #include <sstream>
 #include <cctype>
 #include <string>
+#include <stdexcept>
 #include "stack.h"
 #include "queue.h"
 
-// TODO: bool palindrome(const std::string& s) QUEUE
-//start by removing all the non-alphabet characters and convert everything to upper
-//use a queue data structure to process and return the string
-bool palindrome(const std::string& s) {
-    LinkedQueue<char> queue;
-    LinkedQueue<char> queue2;
+bool palindrome(const std::string& spalindrome) {
+    LinkedQueue<char> forwardQueue;
+    LinkedQueue<char> backwardQueue;
 
-    for (int i = s.length()-1; i >= 0; i--){
-        if(isalpha(s[i])){
-            queue.enqueue(static_cast<char>(std::toupper(s[i])));
+    int sz = spalindrome.length();
+
+    for (int i = sz-1; i >= 0; i--){
+        if(isalpha(spalindrome[i])){
+            backwardQueue.enqueue(static_cast<char>(std::toupper(spalindrome[i])));
         }
     }
-    for (int i = 0; i <= s.length(); i++){
-        if(isalpha(s[i])){
-            queue2.enqueue(static_cast<char>(std::toupper(s[i])));
+
+    for (int i = 0; i <= sz; i++){
+        if(isalpha(spalindrome[i])){
+            forwardQueue.enqueue(static_cast<char>(std::toupper(spalindrome[i])));
         }
     }
-    while (!queue.empty()){
-        if(queue.peekFront() == queue2.peekFront()){
-            queue.dequeue();
-            queue2.dequeue();
+
+    while (!forwardQueue.empty()){
+        if(forwardQueue.peekFront() == backwardQueue.peekFront()){
+            forwardQueue.dequeue();
+            backwardQueue.dequeue();
         } else {
             return false;
         }
     }
-    return queue.empty();
+
+    return forwardQueue.empty();
 }
 
-// TODO: bool balancedBrackets(std::string s, char start = '(', char end = ')') STACK
-//returns whether the braces are balanced or not
-bool balancedBrackets(std::string s, char start = '(', char end = ')'){
-    LinkedStack<char> stack;
-    for (int i = 0; i <= s.length(); i++){
-        if(s[i] == start) {
-            stack.push(start);
+bool balancedBrackets(std::string string, char start = '(', char end = ')'){
+    LinkedStack<char> balancedStack;
+
+    int sz = string.length();
+
+    for (int i = 0; i <= sz; i++){
+        if(string[i] == start) {
+            balancedStack.push(start);
         }
-        else if(s[i] == end) {
-          //if empty do not pop return false
-            stack.pop();
+        else if(string[i] == end) {
+          if(balancedStack.empty()){
+            return false;
+          }
+            balancedStack.pop();
         }
     }
-    return stack.empty();
+    return balancedStack.empty();
 }
 
-// TODO: double evaluatePostfixExpression(std::string s) STACK
-//given post fix expression return the value
-//read the operation one token at a time, if it is a number push it onto the stack
-//if the token is a operation then do the following
-  //read the top of the stack for the first operand then pop
-  //read the top of the stack again for the second operand then pop
-  //finally perform the operation on the first and second operands then
-  //push the result to the stack
-  //(if the second operand of a / operation is 0 throw divide by zero error
-  //6 3 + 2 *
-//create a string stream
-//std::stringstream sin;
-//sin << s;
-//define a string
-//string token;
-//while(sin>>token)
-//return stod to make string into double
+double evaluatePostfixExpression(std::string postfixString){
+    LinkedStack<double> postfixStack;
 
-/*double evalutePostfixExpression(std::string s){
-  LinkedStack<double> stack;
-  for(int i = 0; i <= s.length(); i++) {
-    if(isdigit(s[i])){
-      stack.push(static_cast<double>((s[i])));
-    } else if ()
-    else {
-      double op1 = stack.top();
-      stack.pop();
-      double op2 = stack.top();
-      stack.pop();
-      switch (s[i]){
-        case '+':
-          stack.push(op1 + op2);
-          break;
-        case '-':
-          stack.push(op1 - op2);
-          break;
-        case '/':
-          stack.push(op1 / op2);
-          break;
-        case '*':
-          stack.push(op1 * op2);
-          break;
-        case ' ':
-          break;
-        default:
-          std::cout << "illegal operator" << std::endl;
-      }//end switch
-    }//end else
-  }//end for
-  return stack.top();*/
-//}
+    std::stringstream sin;
+    sin << postfixString;
+    std::string token;
+
+    while(sin>>token){
+        if (token == "+"){
+            double op1 = postfixStack.top();
+            postfixStack.pop();
+            double op2 = postfixStack.top();
+            postfixStack.pop();
+            postfixStack.push(op1 + op2);
+        } else if (token == "-"){
+            double op1 = postfixStack.top();
+            postfixStack.pop();
+            double op2 = postfixStack.top();
+            postfixStack.pop();
+            postfixStack.push(op1 - op2);
+        } else if (token == "*"){
+            double op1 = postfixStack.top();
+            postfixStack.pop();
+            double op2 = postfixStack.top();
+            postfixStack.pop();
+            postfixStack.push(op1 * op2);
+        } else if (token == "/"){
+            double op1 = postfixStack.top();
+            postfixStack.pop();
+            double op2 = postfixStack.top();
+            postfixStack.pop();
+            postfixStack.push(op1 / op2);
+        } else {
+            postfixStack.push(std::stod(token));
+        }
+    }
+    return postfixStack.top();
+}
 
 #endif
